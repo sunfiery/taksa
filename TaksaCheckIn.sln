@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31613.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaksaCheckIn", "TaksaCheckIn.csproj", "{E3FA0479-6018-41E4-8F45-F103E0970251}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{A7501A43-1CA6-4EAC-A7ED-9AA032FD867C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E3FA0479-6018-41E4-8F45-F103E0970251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3FA0479-6018-41E4-8F45-F103E0970251}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3FA0479-6018-41E4-8F45-F103E0970251}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3FA0479-6018-41E4-8F45-F103E0970251}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7501A43-1CA6-4EAC-A7ED-9AA032FD867C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7501A43-1CA6-4EAC-A7ED-9AA032FD867C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7501A43-1CA6-4EAC-A7ED-9AA032FD867C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7501A43-1CA6-4EAC-A7ED-9AA032FD867C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {316F3662-4D75-438A-BFCE-B3FE1C13A365}
+	EndGlobalSection
+EndGlobal
