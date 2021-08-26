@@ -27,11 +27,11 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
     FormsModule,
     ApiAuthorizationModule,
     RouterModule.forRoot([
-      { path: '', redirectTo: '/pupils', pathMatch: 'full' },
-      { path: 'pupils', component: PupilsComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
-    ])
+    { path: '', redirectTo: '/pupils', pathMatch: 'full' },
+    { path: 'pupils', component: PupilsComponent, pathMatch: 'full' },
+    { path: 'counter', component: CounterComponent },
+    { path: 'fetch-data', component: FetchDataComponent, canActivate: [AuthorizeGuard] },
+], { relativeLinkResolution: 'legacy' })
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }
