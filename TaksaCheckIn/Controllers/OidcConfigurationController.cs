@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace TaksaCheckIn.Controllers
+namespace Domain.Controllers
 {
     public class OidcConfigurationController : Controller
     {

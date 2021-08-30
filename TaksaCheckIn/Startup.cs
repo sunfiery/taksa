@@ -1,21 +1,20 @@
+using Domain.Core.DAL;
+using Domain.Core.Services;
 using Domain.DAL.Postgre;
+using Domain.Entities;
+using Domain.Repository;
+using Domain.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
-using TaksaCheckIn.Data;
-using TaksaCheckIn.Models;
 
-namespace TaksaCheckIn
+namespace Domain
 {
     public class Startup
     {
@@ -28,9 +27,13 @@ namespace TaksaCheckIn
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+{
+            services.AddTransient<IDataRepository<Pupil>, PupilManager>();
+            services.AddTransient<IDataRepository<Filiation>, FiliationManager>();
+            services.AddSingleton<ILoggingService>(LoggingService.GetLoggingService());
+
             // ===== Add DbContext ========
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<PostgreContext>(options =>
             {
                 options.UseNpgsql(Configuration.GetConnectionString("PostgreConnection"), x => x.MigrationsHistoryTable("__migration_history", "public"));
                 options.UseLazyLoadingProxies();
@@ -44,10 +47,10 @@ namespace TaksaCheckIn
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<PostgreContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+                .AddApiAuthorization<ApplicationUser, PostgreContext>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();

@@ -1,6 +1,6 @@
 using System;
 
-namespace TaksaCheckIn
+namespace Domain
 {
     public class WeatherForecast
     {

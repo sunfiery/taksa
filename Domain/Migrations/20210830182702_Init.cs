@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace TaksaCheckIn.Migrations
+namespace Domain.Migrations
 {
-    public partial class InitIdentity : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -64,6 +64,23 @@ namespace TaksaCheckIn.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DeviceCodes", x => x.UserCode);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "filiation",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "text", nullable: true),
+                    address = table.Column<string>(type: "text", nullable: true),
+                    description = table.Column<string>(type: "text", nullable: true),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    date_modify = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_filiation", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,6 +209,57 @@ namespace TaksaCheckIn.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "group",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    filiation_id = table.Column<int>(type: "integer", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: true),
+                    description = table.Column<string>(type: "text", nullable: true),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    date_modify = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_group", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_group_filiation_filiation_id",
+                        column: x => x.filiation_id,
+                        principalTable: "filiation",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "pupil",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    group_id = table.Column<int>(type: "integer", nullable: false),
+                    first_name = table.Column<string>(type: "text", nullable: true),
+                    last_name = table.Column<string>(type: "text", nullable: true),
+                    patronymic_name = table.Column<string>(type: "text", nullable: true),
+                    date_of_birth = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    parents = table.Column<string>(type: "text", nullable: true),
+                    contact_phones = table.Column<string>(type: "text", nullable: true),
+                    is_active = table.Column<bool>(type: "boolean", nullable: false),
+                    date_create = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    date_modify = table.Column<DateTime>(type: "timestamp without time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_pupil", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_pupil_group_group_id",
+                        column: x => x.group_id,
+                        principalTable: "group",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -241,6 +309,11 @@ namespace TaksaCheckIn.Migrations
                 column: "Expiration");
 
             migrationBuilder.CreateIndex(
+                name: "IX_group_filiation_id",
+                table: "group",
+                column: "filiation_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrants_Expiration",
                 table: "PersistedGrants",
                 column: "Expiration");
@@ -254,6 +327,11 @@ namespace TaksaCheckIn.Migrations
                 name: "IX_PersistedGrants_SubjectId_SessionId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "SessionId", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_pupil_group_id",
+                table: "pupil",
+                column: "group_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -280,10 +358,19 @@ namespace TaksaCheckIn.Migrations
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
+                name: "pupil");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "group");
+
+            migrationBuilder.DropTable(
+                name: "filiation");
         }
     }
 }
