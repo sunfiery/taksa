@@ -24,7 +24,7 @@ namespace TaksaCheckIn.Controllers
             return Ok(pupils);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetPupil")]
         public async Task<IActionResult> Get(int id)
         {
             Pupil pupil = await _repository.GetAsync(id);
@@ -39,7 +39,7 @@ namespace TaksaCheckIn.Controllers
             if (pupil == null) return BadRequest("Pupil is null.");
 
             await _repository.AddAsync(pupil);
-            return CreatedAtRoute("Get", new { Id = pupil.ID }, pupil);
+            return CreatedAtRoute("GetPupil", new { Id = pupil.ID }, pupil);
         }
 
         [HttpPut("{id}")]

@@ -30,6 +30,7 @@ namespace Domain
 {
             services.AddTransient<IDataRepository<Pupil>, PupilManager>();
             services.AddTransient<IDataRepository<Filiation>, FiliationManager>();
+            services.AddTransient<IDataRepository<Group>, GroupManager>();
             services.AddSingleton<ILoggingService>(LoggingService.GetLoggingService());
 
             // ===== Add DbContext ========

@@ -23,7 +23,7 @@ namespace TaksaCheckIn.Controllers
             return Ok(filiations);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetFilation")]
         public async Task<IActionResult> Get(int id)
         {
             Filiation filiation = await _repository.GetAsync(id);
@@ -38,7 +38,7 @@ namespace TaksaCheckIn.Controllers
             if (filiation == null) return BadRequest("Filiation is null.");
 
             await _repository.AddAsync(filiation);
-            return CreatedAtRoute("Get", new { Id = filiation.ID }, filiation);
+            return CreatedAtRoute("GetFilation", new { Id = filiation.ID }, filiation);
         }
 
         [HttpPut("{id}")]

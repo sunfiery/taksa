@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder } from '@angular/forms';
 
 @Component({
@@ -9,6 +9,9 @@ import { FormBuilder } from '@angular/forms';
 })
 export class PupilsComponent {
   baseUrl;
+  filationModalRef;
+  groupModalRef;
+  pupilModalRef;
   active = 1;
   public filiations: Filiation[];
   closeResult = '';
@@ -17,11 +20,16 @@ export class PupilsComponent {
     address: ''
   });
 
+  groupForm = this.fb.group({
+    name: '',
+    description: ''
+  });
+
   constructor(
     private http: HttpClient,
     @Inject('BASE_URL') baseUrl: string,
     private modalService: NgbModal,
-    private fb: FormBuilder,
+    private fb: FormBuilder
   ) {
 
     this.baseUrl = baseUrl;
@@ -39,8 +47,31 @@ export class PupilsComponent {
     event.preventDefault();
   }
 
-  open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+  openFilationModal(content) {
+    this.filationModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+    this.filationModalRef.result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+
+    event.preventDefault();
+  }
+
+  openGroupModal(content, filationID) {
+    this.groupModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+    this.groupModalRef.result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+
+    event.preventDefault();
+  }
+
+  openPupilModal(content) {
+    this.pupilModalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+    this.pupilModalRef.result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -59,10 +90,7 @@ export class PupilsComponent {
     }
   }
 
-  onSubmit(): void {
-    //var formData: any = new FormData();
-    //formData.append("name", this.filiationForm.get('name').value);
-    //formData.append("address", this.filiationForm.get('address').value);
+  onFilationSubmit(): void {
 
     var data = {
       name: this.filiationForm.get('name').value,
@@ -70,12 +98,38 @@ export class PupilsComponent {
     };
 
     this.http.post<Filiation>(this.baseUrl + 'api/filiation', data).subscribe(
-      (response) => console.log(response),
-      (error) => console.log(error)
+      (response) => {
+        console.log(response);
+        this.filationModalRef.close();
+      },
+      (error) => {
+        console.log(error);
+      }
     );
 
     console.warn('Your order has been submitted', this.filiationForm.value);
     this.filiationForm.reset();
+  }
+
+  onGroupSubmit(): void {
+
+    var data = {
+      name: this.groupForm.get('name').value,
+      description: this.groupForm.get('description').value
+    };
+
+    this.http.post<Group>(this.baseUrl + 'api/group', data).subscribe(
+      (response) => {
+        console.log(response);
+        this.groupModalRef.close();
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+    console.warn('Your order has been submitted', this.groupForm.value);
+    this.groupForm.reset();
   }
 }
 
@@ -83,4 +137,10 @@ interface Filiation {
   id: number;
   name: string;
   address: string;
+}
+
+interface Group {
+  id: number;
+  name: string;
+  description: string;
 }

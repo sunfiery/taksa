@@ -5,11 +5,59 @@
       <span class="close position-relative pl-2 font-weight-light" (click)="close($event, f.id)">×</span>
     </a>
     <ng-template ngbNavContent>
-      <p>{{ f.name }} content</p>
+
+      <div class="form-group" *ngFor="let group of f.groups; index as i">
+        <ngb-accordion #acc="ngbAccordion">
+          <ngb-panel [title]="group.name">
+            <ng-template ngbPanelContent>
+
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Фамилия Имя</th>
+                    <th scope="col">Дата рождения</th>
+                    <th scope="col">Возраст</th>
+                    <th scope="col">Родители</th>
+                    <th scope="col">Телефоны</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let pupil of group.pupils; index as i">
+                    <th scope="row">{{ i + 1 }}</th>
+                    <td>{{ pupil.name }}</td>
+                    <td>{{ pupil.birthday }}</td>
+                    <td>{{ pupil.age }}</td>
+                    <td>{{ pupil.parents }}</td>
+                    <td>{{ pupil.phones }}</td>
+                    <td>
+                      <button class="btn btn-success">
+                        <i class="bi-pencil-fill"></i>
+                      </button>
+                      <button class="btn btn-success">
+                        <i class="bi-x"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
+      </div>
+
+      <div class="form-group">
+        <button type="button" class="btn btn-success" (click)="openGroupModal(groupContent, f.id)">
+          <i class="bi-plus"></i> Группа
+        </button>
+      </div>
+
     </ng-template>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href (click)="open(content)">...</a>
+    <a class="nav-link" href (click)="openFilationModal(filationContent)">...</a>
   </li>
 </ul>
 
@@ -18,7 +66,7 @@
 <pre>Active: {{ active }}</pre>
 
 
-<ng-template #content let-modal>
+<ng-template #filationContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Новый филиал</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -42,7 +90,36 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="onSubmit()">Сохранить</button>
+    <button type="button" class="btn btn-success" (click)="onFilationSubmit()">Сохранить</button>
+    <button type="button" class="btn btn-light" (click)="modal.close('Save click')">Отмена</button>
+  </div>
+</ng-template>
+
+<ng-template #groupContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Новая группа</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="groupForm" (ngSubmit)="onGroupSubmit()">
+      <div class="form-group">
+        <label for="name">
+          Название
+        </label>
+        <input id="name" class="form-control" type="text" formControlName="name" />
+      </div>
+      <div class="form-group">
+        <label for="desc">
+          Описание
+        </label>
+        <textarea id="desc" class="form-control" formControlName="description"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="onGroupSubmit()">Сохранить</button>
     <button type="button" class="btn btn-light" (click)="modal.close('Save click')">Отмена</button>
   </div>
 </ng-template>
